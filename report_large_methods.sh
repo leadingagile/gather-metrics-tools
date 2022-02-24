@@ -13,9 +13,7 @@ list_large_methods()
 {
     declare REPO="$1"
     declare RUN_NAME="$2"
-
-    declare LIMIT_LINES
-    LIMIT_LINES="$(jq '.data[0].method_lines.limit ' "${REPO}/${RUN_NAME}/statistics/javascript/counts_over_limit.json")"
+    declare LIMIT_LINES="$3"
 
     jq '[ .data[0].extracted_data[]
         | select(.method_length > '"${LIMIT_LINES}"')
@@ -37,9 +35,13 @@ for REPO in "${REPORTS_FOLDER}"/*; do
     (( REPO_COUNT > 0 )) && printf ','
     printf '"%s":' "$(basename "${REPO}")"
 
+    declare LIMIT_LINES
+    LIMIT_LINES="$(jq '.data[0].method_lines.limit ' "${REPO}/${RUN_NAME}/statistics/javascript/counts_over_limit.json")"
+
     printf '{'
+    printf '"%s": %s,' "limit" "${LIMIT_LINES}"
     printf '"%s":' "large_methods"
-    list_large_methods "${REPO}" "${RUN_NAME}"
+    list_large_methods "${REPO}" "${RUN_NAME}" "${LIMIT_LINES}"
     printf '}'
 
     ((++REPO_COUNT))
