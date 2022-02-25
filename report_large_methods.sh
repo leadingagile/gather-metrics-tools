@@ -2,7 +2,7 @@
 
 # List the methods that are over the limit (mean+2*stdev)
 
-RUN_NAME="${1:-2022-02-23_15-12-25-0500}"
+RUN_NAME="${1:-2021_Annual}"
 LANGUAGE="${2:-"javascript"}"
 REPORTS_FOLDER="${3:-"$HOME/projects/reports"}"
 

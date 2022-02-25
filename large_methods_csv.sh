@@ -2,7 +2,7 @@
 
 # List the methods that are over the limit (mean+2*stdev)
 
-RUN_PATH="${1:-${HOME}/projects/reports/BUY_GUX_EU/2022-02-23_15-12-25-0500}"
+RUN_PATH="${1:-${HOME}/projects/reports/BUY_GUX_EU/2021_Annual}"
 LANGUAGE="${2:-"javascript"}"
 
 type -t jq > /dev/null 2>&1 || { echo "needs jq. Install with 'brew install jq"; exit 1; }
