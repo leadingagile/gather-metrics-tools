@@ -66,7 +66,6 @@ while (( "$#" )); do
    case "${1}" in
 
    --help|-h|-[?])
-      echo "Unknown option: '$1'"
       usage
       exit 0
       ;;
