@@ -141,7 +141,7 @@ echo "OUTPUT_FOLDER='${OUTPUT_FOLDER}'"
 
 
 
- time docker run -it --rm \
+ { time docker run -it --rm \
     -v "${REPOS_FOLDER}":/opt/repos \
     -v "${OUTPUT_FOLDER}":/opt/output \
     leadingagilestudios.azurecr.io/analysis/gather-cli:0.2.0 \
@@ -149,4 +149,5 @@ echo "OUTPUT_FOLDER='${OUTPUT_FOLDER}'"
     -r "${RUN_NAME}" \
     -t "${STEPS}" \
     -c "${CONFIG_FILE}" \
+   ; } \
     2>&1 | tee "${OUTPUT_FOLDER}/console.log"
