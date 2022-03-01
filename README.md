@@ -1,5 +1,16 @@
 # Using the LeadingAgile Code Analysis Tools
 
+This is a collection of tools to demonstrate the use of the Code Analysis tool.
+
+The main utility is the `gather_metrics.sh` script. This script wraps the invocation of the Code Analysis docker image and provides it with the parameters for the evaluation data collection.
+
+The Code Analysis tool gathers metrics data from a collection of git repositories. This set of repositories must be in a common base folder. The Code Analysis tool iterates over each of the repositories during its data collection runs.
+
+The Code Analysis tool creates a set of json data files for each repository for each time it is run. These data output files will be stored under a folder which you specific in the parameter set.
+
+Some of the other scripts are intended to show examples of extracting data from the json created by the Code Analysis too. (TODO: Get up-to-date doc for data formats. For now, we have the [slightly out-of-date version](./language_analysis_data_formats.pdf) which has some representations that are somewhat close.)
+
+
 ## Docker Images
 
 There are two Docker images available that will cover most of the use of the tools:
