@@ -18,6 +18,8 @@ There are two Docker images available that will cover most of the use of the too
 
 To use the Docker images, you will need to have the Docker images.
 
+To get the Docker images, you must have [Docker Desktop](https://www.docker.com/products/docker-desktop) installed and running.
+
 You probably need to be OFF the VPN to do these setup steps.
 
 1. Authenticate with docker registry (currently hosted by LeadingAgile)
@@ -35,6 +37,13 @@ az acr login --name leadingagilestudios
 docker pull leadingagilestudios.azurecr.io/analysis/gather:0.2.0
 docker pull leadingagilestudios.azurecr.io/analysis/gather-cli:0.2.0
 ```
+
+## Detailed Container Documentation
+
+To explore possible uses of the Code Analysis Docker images beyond what is provided with the scripts below, see the main documentation:
+
+* [Gather CLI](./DockerGatherCLIReadme.pdf) covers the `gather-cli` image which wraps many of the lower-level tools to process multiple repositories. This image generally covers the most common uses
+* [Gather](./DockerReadme.pdf) covers the lower-level tools that are available in the `gather` image (metrics collection, statistics generation, GQM answer generation, etc.)
 
 ## Scripts
 
