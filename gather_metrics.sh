@@ -15,13 +15,17 @@ usage()
    echo "Options:"
    echo
    echo " -n, --run-name"
-   echo "      Name the run of metrics collection. Defaults to the current date."
+   echo "      Name the run of metrics collection."
+   echo "      Defaults to the current date."
    echo
-   echo " -s, --steps"
-   echo "      Steps (i.e, weeks) to step back in time from the start date. Metrics are gathered at each step. Defaults to ${STEPS}."
+   echo " -w, --weeks, -s, --steps"
+   echo "      Weeks to step back in time from the start date. Metrics are gathered at each step."
+   echo "      Defaults to ${STEPS}."
    echo
    echo " -d, --start-date"
-   echo "      Start date for the gathering. Metrics collection for each repository will be started as close this this date as possible. Defaults to the current date."
+   echo "      Start date for the gathering."
+   echo "      Metrics collection for each repository will be started as close this this date as possible."
+   echo "      Defaults to the current date."
    echo
    echo " -c, --config-file"
    echo "      A team configuraton file. See the Code Analysis documentation for details."
@@ -50,7 +54,7 @@ usage()
    echo
    echo "Example: "
    echo
-   echo '      ./gather_metrics.sh --run-name "Q4_2021" --steps 52 --start-date "2021-12-31" --repos-folder ~/projects --output-folder ~/projects/reports/'
+   echo '      ./gather_metrics.sh --run-name "Q4_2021" --weeks 52 --start-date "2021-12-31" --repos-folder ~/projects --output-folder ~/projects/reports/'
    echo
 }
 
@@ -79,11 +83,11 @@ while (( "$#" )); do
       shift
       ;;
 
-   -s|--steps)
+   -s|-w|--steps|--weeks)
       STEPS="$2"
       shift; shift
       ;;
-   -s=*|--steps=*)
+   -s=*|-w=*|--steps=*|--weeks=*)
       STEPS="${1##*=}"
       shift
       ;;

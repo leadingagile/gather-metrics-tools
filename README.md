@@ -76,13 +76,17 @@ Processes all of the repositories found in the REPOS_FOLDER to
 Options:
 
  -n, --run-name
-      Name the run of metrics collection. Defaults to the current date.
+      Name the run of metrics collection.
+      Defaults to the current date.
 
- -s, --steps
-      Steps (i.e, weeks) to step back in time from the start date. Metrics are gathered at each step. Defaults to 52.
+ -w, --weeks, -s, --steps
+      Weeks to step back in time from the start date. Metrics are gathered at each step.
+      Defaults to 52.
 
  -d, --start-date
-      Start date for the gathering. Metrics collection for each repository will be started as close this this date as possible. Defaults to the current date.
+      Start date for the gathering.
+      Metrics collection for each repository will be started as close this this date as possible.
+      Defaults to the current date.
 
  -c, --config-file
       A team configuraton file. See the Code Analysis documentation for details.
@@ -111,18 +115,82 @@ Before using:
 
 Example:
 
-      ./gather_metrics.sh --run-name "Q4_2021" --steps 52 --start-date "2021-12-31" --repos-folder ~/projects --output-folder ~/projects/reports/
+      ./gather_metrics.sh --run-name "Q4_2021" --weeks 52 --start-date "2021-12-31" --repos-folder ~/projects --output-folder ~/projects/reports/
 ```
 
-## report_large_methods.sh
+## report_large_items.sh
 
-Process the data generated from the `gather-cli` to create a json extract of the large methods, where **large** is defined as 2 standard deviations above the median of the method length.
+Process the data generated from the `gather-cli` to create a json extract of large methods and complex methods, where **large** and **complex** are defined as 2 standard deviations above the mean of the metric values.
+
+Example:
+
+```shell
+./report_large_items.sh 2022_Q1 'javascript' ~/projects/reports
+```
+
+Which outputs JSON that has the "large" items for each repository with the identification information and the limit used to determine "large" for each metric.
+
+```json
+{
+  "2022_Q1": {
+    "BUY_GUX_EU": {
+      "method_length": {
+        "limit": 243.55414648132026,
+        "large_items": [
+          {
+            "method_name": "anonymous function",
+            "method_length": 597,
+            "file": "aem/react-app/config/webpack.config.js"
+          },
+        ]
+      },
+      "cyclomatic_complexity": {
+        "limit": 6.616198561805495,
+        "large_items": [
+          {
+            "method_name": "anonymous function",
+            "cyclomatic_complexity": 7,
+            "file": "aem/react-app/config/modules.js"
+          },
+          {
+            "method_name": "anonymous function",
+            "cyclomatic_complexity": 33,
+            "file": "aem/react-app/config/webpack.config.js"
+          },
+        ]
+      }
+    },
+    "BUY_GUX_NA": {
+      "method_length": {
+        "limit": 217.9003233575817,
+        "large_items": [
+          {
+            "method_name": "anonymous function",
+            "method_length": 596,
+            "file": "aem/react-app/config/webpack.config.js"
+          },
+        ]
+      },
+      "cyclomatic_complexity": {
+        "limit": 7.362525192721681,
+        "large_items": [
+          {
+            "method_name": "anonymous function",
+            "cyclomatic_complexity": 33,
+            "file": "aem/react-app/config/webpack.config.js"
+          },
+        ]
+      }
+    }
+  }
+}
+```
 
 Requires data sets collected using the `gather-metrics.sh` script.
 
 ## large_methods_csv.sh
 
-Same as `report_large_methods.sh` except the output is in CSV format.
+Another example using `jq` to dig through the data to report large methods in a CSV format.
 
 Requires data sets collected using the `gather-metrics.sh` script.
 
