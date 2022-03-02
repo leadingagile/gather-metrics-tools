@@ -1,15 +1,16 @@
 node {
     echo "Hello World!"
 
-    stage('Pull Image') {
-        script {
-            sh "docker pull hello-world"
+    docker.withTool("default") {
+        stage('Pull Image') {
+            script {
+                sh "docker pull hello-world"
+            }
+        }
+        stage('Run Container') {
+            script {
+                sh "docker run -it --rm hello-world"
+            }
         }
     }
-    stage('Run Container') {
-        script {
-            sh "docker run -it --rm hello-world"
-        }
-    }
-
 }
