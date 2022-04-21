@@ -68,7 +68,7 @@ Requires the `leadingagilestudios.azurecr.io/analysis/gather-cli:0.2.0` image.
 gather_metrics.sh [options]
 
 
-Run the 'metrics.utility gather-multi' tool
+Run the 'metrics.utility gather-multi' tool using the gather_cli docker image
 Processes all of the repositories found in the REPOS_FOLDER to
   creates a new run of data to be recorded as RUN_NAME
   beginning at START_DATE in each of the repostories
@@ -94,12 +94,17 @@ Options:
 
  -r, --repos-folder
       The base folder that holds all of the repositories to be analyzed.
-      Defaults to '/Users/bhowar68/projects/ford_shopbuy' (i.e. a convenient place for me).
+      Defaults to the current folder.
 
  -o, --output-folder
       The output folder where all the collected metrics data will be written.
       See the Code Analysis documentation for information in the structure and content.
-      Defaults to '/Users/bhowar68/projects/reports' (i.e. a convenient place for me).
+      Required. Cannot be blank.
+
+ -i, --image
+      The docker image to use.
+      Defaults to 'leadingagilestudios.azurecr.io/analysis/gather-cli:0.2.0'
+      The image MUST be a 'gather-cli' image.
 
 Be sure each repository is currently on the branch you are interested in evaluating
 
@@ -115,10 +120,82 @@ Before using:
 
 Example:
 
-      ./gather_metrics.sh --run-name "Q4_2021" --weeks 52 --start-date "2021-12-31" --repos-folder ~/projects --output-folder ~/projects/reports/
+      ./gather_metrics.sh --run-name "Q4_2021" --weeks 52 --start-date "2021-12-31" --repos-folder ~/projects/repositories --output-folder ~/projects/reports/
 ```
 
-## report_large_items.sh
+
+### gather_tool.sh
+
+```
+gather_tool.sh [options] tool-name [tool options]
+
+
+Run the 'metrics' tool using the gather docker image
+The gather docker image provides access to the lower-level functions in the metrics code analysis tool set.
+The valid Tool Names are: gather statistics answers plotting utility
+Tool Options are specific to each tool. Pass '--help' as the tool options to get help for a tool.
+
+Options:
+
+ -h, --help
+      Show this help
+
+ -r, --repos-folder
+      The base folder that holds all of the repositories to be analyzed.
+      Defaults to the current folder.
+
+ -o, --output-folder
+      The output folder where all the collected metrics data will be written.
+      See the Code Analysis documentation for information in the structure and content.
+      Required. Cannot be blank.
+
+ -i, --image
+      The docker image to use.
+      Defaults to 'leadingagilestudios.azurecr.io/analysis/gather:0.2.0'
+      The image MUST be the 'gather' image.
+
+Before using:
+   (you probably need to be OFF the VPN to do this)
+   Authenticate with docker registry (currently hosted by LeadingAgile)
+      Using azure cli (brew install azure-cli)
+         az login
+         az acr login --name leadingagilestudios
+   Get the docker image
+      docker pull leadingagilestudios.azurecr.io/analysis/gather:0.2.0
+
+
+KEEP IN MIND (oddities of running in a docker image)
+
+* Path-based options for tools
+   The tools is run inside a docker container with two volumes mounted pointing to host folders.
+   Any folder-location options passed to the tools must be based on these mounts using the container paths instead of the host paths.
+
+   The '--output-folder' option for this script is mounted as '/opt/output/' in the container
+   The '--repos-folder' option for this script is mounted as '/opt/repos/' in the container
+
+   NOTE: This will lead to the Oddity that '--output-folder' and '--repo-folder' will be defined twice.
+         One definition will be for this script (relative to the host folder structure) and the other
+         definition will be defined for the utility being invoked (relative to the container folder structure).
+
+Examples:
+
+./gather_tool.sh --output-folder ~/projects/reports --repos-folder ~/projects/project_repos \
+                     utility frequency-subset \
+                     --percent 10 \
+                     --team-name "TOP_10_PERCENT" \
+                     --run-name "2021_Annual" \
+                     --output-folder "~/projects/reports" \
+                     --team-config "/opt/output/team_config.json"
+
+./gather_tool.sh --output-folder ~/projects/reports --repos-folder ~/projects/project_repos \
+                     utility frequency-subset --help
+
+./gather_tool.sh --output-folder ~/projects/reports --repos-folder ~/projects/project_repos \
+                     gather --help
+
+```
+
+### report_large_items.sh
 
 Process the data generated from the `gather-cli` to create a json extract of large methods and complex methods, where **large** and **complex** are defined as 2 standard deviations above the mean of the metric values.
 
@@ -188,7 +265,7 @@ Which outputs JSON that has the "large" items for each repository with the ident
 
 Requires data sets collected using the `gather-metrics.sh` script.
 
-## large_methods_csv.sh
+### large_methods_csv.sh
 
 Another example using `jq` to dig through the data to report large methods in a CSV format.
 
