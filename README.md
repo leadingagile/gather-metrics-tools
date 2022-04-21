@@ -210,14 +210,14 @@ Which outputs JSON that has the "large" items for each repository with the ident
 ```json
 {
   "2022_Q1": {
-    "BUY_GUX_EU": {
+    "store_fromt_app": {
       "method_length": {
         "limit": 243.55414648132026,
         "large_items": [
           {
             "method_name": "anonymous function",
             "method_length": 597,
-            "file": "aem/react-app/config/webpack.config.js"
+            "file": "dream/react-app/config/webpack.config.js"
           },
         ]
       },
@@ -227,24 +227,24 @@ Which outputs JSON that has the "large" items for each repository with the ident
           {
             "method_name": "anonymous function",
             "cyclomatic_complexity": 7,
-            "file": "aem/react-app/config/modules.js"
+            "file": "dream/react-app/config/modules.js"
           },
           {
             "method_name": "anonymous function",
             "cyclomatic_complexity": 33,
-            "file": "aem/react-app/config/webpack.config.js"
+            "file": "dream/react-app/config/webpack.config.js"
           },
         ]
       }
     },
-    "BUY_GUX_NA": {
+    "finance_app": {
       "method_length": {
         "limit": 217.9003233575817,
         "large_items": [
           {
             "method_name": "anonymous function",
             "method_length": 596,
-            "file": "aem/react-app/config/webpack.config.js"
+            "file": "dream/react-app/config/webpack.config.js"
           },
         ]
       },
@@ -254,7 +254,7 @@ Which outputs JSON that has the "large" items for each repository with the ident
           {
             "method_name": "anonymous function",
             "cyclomatic_complexity": 33,
-            "file": "aem/react-app/config/webpack.config.js"
+            "file": "dream/react-app/config/webpack.config.js"
           },
         ]
       }
