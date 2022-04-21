@@ -7,7 +7,7 @@ usage()
    echo "gather_metrics.sh [options]"
    echo
    echo
-   echo "Run the 'metrics.utility gather-multi' tool"
+   echo "Run the 'metrics.utility gather-multi' tool using the gather_cli docker image"
    echo "Processes all of the repositories found in the REPOS_FOLDER to"
    echo "  creates a new run of data to be recorded as RUN_NAME"
    echo "  beginning at START_DATE in each of the repostories"
@@ -33,12 +33,17 @@ usage()
    echo
    echo " -r, --repos-folder"
    echo "      The base folder that holds all of the repositories to be analyzed."
-   echo "      Defaults to '${REPOS_FOLDER}' (i.e. a convenient place for me)."
+   echo "      Defaults to the current folder."
    echo
    echo " -o, --output-folder"
    echo "      The output folder where all the collected metrics data will be written."
    echo "      See the Code Analysis documentation for information in the structure and content."
-   echo "      Defaults to '${OUTPUT_FOLDER}' (i.e. a convenient place for me)."
+   echo "      Required. Cannot be blank."
+   echo
+   echo " -i, --image"
+   echo "      The docker image to use."
+   echo "      Defaults to '${DOCKER_IMAGE}'"
+   echo "      The image MUST be a 'gather-cli' image."
    echo
    echo "Be sure each repository is currently on the branch you are interested in evaluating"
    echo
@@ -54,17 +59,18 @@ usage()
    echo
    echo "Example: "
    echo
-   echo '      ./gather_metrics.sh --run-name "Q4_2021" --weeks 52 --start-date "2021-12-31" --repos-folder ~/projects --output-folder ~/projects/reports/'
+   echo '      ./gather_metrics.sh --run-name "Q4_2021" --weeks 52 --start-date "2021-12-31" --repos-folder ~/projects/repositories --output-folder ~/projects/reports/'
    echo
 }
 
-
+DEBUG=false
 RUN_NAME="$(date -j +"%Y-%m-%d_%H-%M-%S%z")"
 START_DATE="$(date -j +"%Y-%m-%d")"
 STEPS=52
 CONFIG_FILE=
-REPOS_FOLDER="$HOME/projects/ford_shopbuy"
-OUTPUT_FOLDER="$HOME/projects/reports"
+REPOS_FOLDER="$(pwd)"
+OUTPUT_FOLDER=
+DOCKER_IMAGE="leadingagilestudios.azurecr.io/analysis/gather-cli:0.2.0"
 
 while (( "$#" )); do
    case "${1}" in
@@ -72,6 +78,11 @@ while (( "$#" )); do
    --help|-h|-[?])
       usage
       exit 0
+      ;;
+
+   --debug)
+      DEBUG=true
+      shift
       ;;
 
    -n|--run-name)
@@ -128,6 +139,15 @@ while (( "$#" )); do
       shift
       ;;
 
+   -i|--image)
+      DOCKER_IMAGE="$2"
+      shift; shift
+      ;;
+   -i=*|--image=*)
+      DOCKER_IMAGE="${1##*=}"
+      shift
+      ;;
+
    *)
       echo "Unknown parameter: '$1'"
       usage
@@ -136,19 +156,38 @@ while (( "$#" )); do
    esac
 done
 
-echo "RUN_NAME='${RUN_NAME}'"
-echo "START_DATE='${START_DATE}'"
-echo "STEPS='${STEPS}'"
-echo "CONFIG_FILE='${CONFIG_FILE}'"
-echo "REPOS_FOLDER='${REPOS_FOLDER}'"
-echo "OUTPUT_FOLDER='${OUTPUT_FOLDER}'"
+if ${DEBUG}; then
+   echo
+   echo "DOCKER_IMAGE='${DOCKER_IMAGE}'"
+   echo "RUN_NAME='${RUN_NAME}'"
+   echo "START_DATE='${START_DATE}'"
+   echo "STEPS='${STEPS}'"
+   echo "CONFIG_FILE='${CONFIG_FILE}'"
+   echo "REPOS_FOLDER='${REPOS_FOLDER}'"
+   echo "OUTPUT_FOLDER='${OUTPUT_FOLDER}'"
+   echo
+fi
 
+if [[ -z "${REPOS_FOLDER}" ]] || [[ ! -d "${REPOS_FOLDER}" ]]; then
+   echo "Folder for repositories is not defined or does not exist: '${REPOS_FOLDER}'"
+   exit 1
+fi
+
+if [[ -z "${OUTPUT_FOLDER}" ]] || [[ ! -d "${OUTPUT_FOLDER}" ]]; then
+   echo "Output folder for results is not defined or does not exist: '${OUTPUT_FOLDER}'"
+   exit 1
+fi
+
+if [[ -z "${DOCKER_IMAGE}" ]] || [[ -z "$(docker image ls -q "${DOCKER_IMAGE}")" ]]; then
+   echo "Docker image name is not defined or the image is not available from docker: '${DOCKER_IMAGE}'"
+   exit 1
+fi
 
 
  { time docker run -it --rm \
     -v "${REPOS_FOLDER}":/opt/repos \
     -v "${OUTPUT_FOLDER}":/opt/output \
-    leadingagilestudios.azurecr.io/analysis/gather-cli:0.2.0 \
+    "${DOCKER_IMAGE}" \
     -d "${START_DATE}" \
     -r "${RUN_NAME}" \
     -t "${STEPS}" \
