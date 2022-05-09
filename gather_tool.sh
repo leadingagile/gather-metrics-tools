@@ -5,6 +5,7 @@ usage()
 {
    echo
    echo "gather_tool.sh [options] tool-name [tool options]"
+   echo "gather_tool.sh --tool-help tool-name"
    echo
    echo
    echo "Run the 'metrics' tool using the gather docker image"
@@ -16,6 +17,9 @@ usage()
    echo
    echo " -h, --help"
    echo "      Show this help"
+   echo
+   echo " --tool-help"
+   echo "      Pass '--help' to tool"
    echo
    echo " -r, --repos-folder"
    echo "      The base folder that holds all of the repositories to be analyzed."
@@ -88,9 +92,10 @@ run_a_tool()
 
 DEBUG=false
 TOOL_NAMES=(gather statistics answers plotting utility)
-DOCKER_IMAGE="leadingagilestudios.azurecr.io/analysis/gather:0.2.0"
+DOCKER_IMAGE="leadingagilestudios.azurecr.io/analysis/gather:0.2.1"
 REPOS_FOLDER="$(pwd)"
 OUTPUT_FOLDER=
+TOOL_HELP=false
 
 while (( "$#" )); do
    case "${1}" in
@@ -98,6 +103,14 @@ while (( "$#" )); do
    --help|-h|-[?])
       usage
       exit 0
+      ;;
+
+   --tool-help)
+      TOOL_HELP=true
+      TOOL_NAME="$2"
+      shift
+      shift
+      break
       ;;
 
    --debug)
@@ -158,24 +171,34 @@ if ${DEBUG}; then
    echo "   $*"
 fi
 
-if [[ -z "${REPOS_FOLDER}" ]] || [[ ! -d "${REPOS_FOLDER}" ]]; then
-   echo "Folder for repositories is not defined or does not exist: '${REPOS_FOLDER}'"
-   exit 1
+if ! [[ "${TOOL_NAMES[*]}" =~ (^| )"$TOOL_NAME"( |$) ]]; then
+    echo "Invalid Tool Name: '${TOOL_NAME}'"
+    exit 1
 fi
 
-if [[ -z "${OUTPUT_FOLDER}" ]] || [[ ! -d "${OUTPUT_FOLDER}" ]]; then
-   echo "Output folder for results is not defined or does not exist: '${OUTPUT_FOLDER}'"
-   exit 1
-fi
 
-if [[ -z "${DOCKER_IMAGE}" ]] || [[ -z "$(docker image ls -q "${DOCKER_IMAGE}")" ]]; then
-   echo "Docker image name is not defined or the image is not available from docker: '${DOCKER_IMAGE}'"
-   exit 1
-fi
+if ${TOOL_HELP}; then
 
-if ! [[ "${TOOL_NAMES[*]}" =~ (^| )"$TOOL"( |$) ]]; then
-   echo "Invalid Tool Name: '${TOOL}'"
-   exit 1
-fi
+   docker run -it --rm \
+      "${DOCKER_IMAGE}" \
+      "${TOOL_NAME}" \
+      --help
 
-run_a_tool "${TOOL_NAME}" "$@"
+else
+    if [[ -z "${REPOS_FOLDER}" ]] || [[ ! -d "${REPOS_FOLDER}" ]]; then
+        echo "Folder for repositories is not defined or does not exist: '${REPOS_FOLDER}'"
+        exit 1
+    fi
+
+    if [[ -z "${OUTPUT_FOLDER}" ]] || [[ ! -d "${OUTPUT_FOLDER}" ]]; then
+        echo "Output folder for results is not defined or does not exist: '${OUTPUT_FOLDER}'"
+        exit 1
+    fi
+
+    if [[ -z "${DOCKER_IMAGE}" ]] || [[ -z "$(docker image ls -q "${DOCKER_IMAGE}")" ]]; then
+        echo "Docker image name is not defined or the image is not available from docker: '${DOCKER_IMAGE}'"
+        exit 1
+    fi
+
+    run_a_tool "${TOOL_NAME}" "$@"
+fi

@@ -14,6 +14,12 @@ usage()
    echo
    echo "Options:"
    echo
+   echo " -h, --help"
+   echo "      Show this help"
+   echo
+   echo " --tool-help"
+   echo "      Pass '--help' to tool"
+   echo
    echo " -n, --run-name"
    echo "      Name the run of metrics collection."
    echo "      Defaults to the current date."
@@ -70,7 +76,8 @@ STEPS=52
 CONFIG_FILE=
 REPOS_FOLDER="$(pwd)"
 OUTPUT_FOLDER=
-DOCKER_IMAGE="leadingagilestudios.azurecr.io/analysis/gather-cli:0.2.0"
+DOCKER_IMAGE="leadingagilestudios.azurecr.io/analysis/gather-cli:0.2.1"
+TOOL_HELP=false
 
 while (( "$#" )); do
    case "${1}" in
@@ -78,6 +85,12 @@ while (( "$#" )); do
    --help|-h|-[?])
       usage
       exit 0
+      ;;
+
+   --tool-help)
+      TOOL_HELP=true
+      shift
+      break
       ;;
 
    --debug)
@@ -168,29 +181,37 @@ if ${DEBUG}; then
    echo
 fi
 
-if [[ -z "${REPOS_FOLDER}" ]] || [[ ! -d "${REPOS_FOLDER}" ]]; then
-   echo "Folder for repositories is not defined or does not exist: '${REPOS_FOLDER}'"
-   exit 1
+if ${TOOL_HELP}; then
+    docker run -it --rm \
+            "${DOCKER_IMAGE}" \
+            --help
+
+    exit 0
+
+else
+    if [[ -z "${REPOS_FOLDER}" ]] || [[ ! -d "${REPOS_FOLDER}" ]]; then
+    echo "Folder for repositories is not defined or does not exist: '${REPOS_FOLDER}'"
+    exit 1
+    fi
+
+    if [[ -z "${OUTPUT_FOLDER}" ]] || [[ ! -d "${OUTPUT_FOLDER}" ]]; then
+    echo "Output folder for results is not defined or does not exist: '${OUTPUT_FOLDER}'"
+    exit 1
+    fi
+
+    if [[ -z "${DOCKER_IMAGE}" ]] || [[ -z "$(docker image ls -q "${DOCKER_IMAGE}")" ]]; then
+    echo "Docker image name is not defined or the image is not available from docker: '${DOCKER_IMAGE}'"
+    exit 1
+    fi
+
+    { time docker run -it --rm \
+        -v "${REPOS_FOLDER}":/opt/repos \
+        -v "${OUTPUT_FOLDER}":/opt/output \
+        "${DOCKER_IMAGE}" \
+        --start-date "${START_DATE}" \
+        --run-name "${RUN_NAME}" \
+        --steps "${STEPS}" \
+        --team-config "${CONFIG_FILE}" \
+    ; } \
+        2>&1 | tee "${OUTPUT_FOLDER}/console.log"
 fi
-
-if [[ -z "${OUTPUT_FOLDER}" ]] || [[ ! -d "${OUTPUT_FOLDER}" ]]; then
-   echo "Output folder for results is not defined or does not exist: '${OUTPUT_FOLDER}'"
-   exit 1
-fi
-
-if [[ -z "${DOCKER_IMAGE}" ]] || [[ -z "$(docker image ls -q "${DOCKER_IMAGE}")" ]]; then
-   echo "Docker image name is not defined or the image is not available from docker: '${DOCKER_IMAGE}'"
-   exit 1
-fi
-
-
- { time docker run -it --rm \
-    -v "${REPOS_FOLDER}":/opt/repos \
-    -v "${OUTPUT_FOLDER}":/opt/output \
-    "${DOCKER_IMAGE}" \
-    -d "${START_DATE}" \
-    -r "${RUN_NAME}" \
-    -t "${STEPS}" \
-    -c "${CONFIG_FILE}" \
-   ; } \
-    2>&1 | tee "${OUTPUT_FOLDER}/console.log"
