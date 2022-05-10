@@ -1,3 +1,14 @@
+
+- [Using the LeadingAgile Code Analysis Tools](#using-the-leadingagile-code-analysis-tools)
+  - [Docker Images](#docker-images)
+  - [Before Using](#before-using)
+  - [Detailed Container Documentation](#detailed-container-documentation)
+  - [Scripts](#scripts)
+    - [gather-metrics.sh](#gather-metricssh)
+    - [gather_tool.sh](#gather_toolsh)
+    - [report_large_items.sh](#report_large_itemssh)
+    - [large_methods_csv.sh](#large_methods_csvsh)
+
 # Using the LeadingAgile Code Analysis Tools
 
 This is a collection of tools to demonstrate the use of the Code Analysis tool.
@@ -8,7 +19,7 @@ The Code Analysis tool gathers metrics data from a collection of git repositorie
 
 The Code Analysis tool creates a set of json data files for each repository for each time it is run. These data output files will be stored under a folder which you specific in the parameter set.
 
-Some of the other scripts are intended to show examples of extracting data from the json created by the Code Analysis too. (TODO: Get up-to-date doc for data formats. For now, we have the [slightly out-of-date version](./language_analysis_data_formats.pdf) which has some representations that are somewhat close.)
+Some of the other scripts are intended to show examples of extracting data from the json created by the Code Analysis too.
 
 
 ## Docker Images
@@ -75,6 +86,12 @@ Processes all of the repositories found in the REPOS_FOLDER to
 
 Options:
 
+ -h, --help
+      Show this help
+
+ --tool-help
+      Pass '--help' to tool
+
  -n, --run-name
       Name the run of metrics collection.
       Defaults to the current date.
@@ -103,7 +120,7 @@ Options:
 
  -i, --image
       The docker image to use.
-      Defaults to 'leadingagilestudios.azurecr.io/analysis/gather-cli:0.2.0'
+      Defaults to 'leadingagilestudios.azurecr.io/analysis/gather-cli:0.2.1'
       The image MUST be a 'gather-cli' image.
 
 Be sure each repository is currently on the branch you are interested in evaluating
@@ -128,6 +145,7 @@ Example:
 
 ```
 gather_tool.sh [options] tool-name [tool options]
+gather_tool.sh --tool-help tool-name
 
 
 Run the 'metrics' tool using the gather docker image
@@ -140,6 +158,9 @@ Options:
  -h, --help
       Show this help
 
+ --tool-help
+      Pass '--help' to tool
+
  -r, --repos-folder
       The base folder that holds all of the repositories to be analyzed.
       Defaults to the current folder.
@@ -151,7 +172,7 @@ Options:
 
  -i, --image
       The docker image to use.
-      Defaults to 'leadingagilestudios.azurecr.io/analysis/gather:0.2.0'
+      Defaults to 'leadingagilestudios.azurecr.io/analysis/gather:0.2.1'
       The image MUST be the 'gather' image.
 
 Before using:
@@ -179,19 +200,20 @@ KEEP IN MIND (oddities of running in a docker image)
 
 Examples:
 
-./gather_tool.sh --output-folder ~/projects/reports --repos-folder ~/projects/project_repos \
-                     utility frequency-subset \
-                     --percent 10 \
-                     --team-name "TOP_10_PERCENT" \
-                     --run-name "2021_Annual" \
-                     --output-folder "~/projects/reports" \
-                     --team-config "/opt/output/team_config.json"
+./gather_tool.sh --output-folder ~/projects/la/metrics_data/dev_docker/ \
+                          utility frequency-subset \
+                          --output-folder /opt/output \
+                          --run-name 2021Annual \
+                          --team-name TopTenPercent \
+                          --percent 10 \
+                          --team-config /opt/output/team-config.yaml
 
 ./gather_tool.sh --output-folder ~/projects/reports --repos-folder ~/projects/project_repos \
-                     utility frequency-subset --help
+                          --tool-help utility
 
 ./gather_tool.sh --output-folder ~/projects/reports --repos-folder ~/projects/project_repos \
-                     gather --help
+                          --tool-help utility frequency-subset
+
 
 ```
 
@@ -270,4 +292,3 @@ Requires data sets collected using the `gather-metrics.sh` script.
 Another example using `jq` to dig through the data to report large methods in a CSV format.
 
 Requires data sets collected using the `gather-metrics.sh` script.
-

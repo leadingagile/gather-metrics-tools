@@ -60,20 +60,19 @@ usage()
    echo
    echo "Examples: "
    echo
-   echo './gather_tool.sh --output-folder ~/projects/reports --repos-folder ~/projects/project_repos \
-                     utility frequency-subset \
-                     --percent 10 \
-                     --team-name "TOP_10_PERCENT" \
-                     --run-name "2021_Annual" \
-                     --output-folder "~/projects/reports" \
-                     --team-config "/opt/output/team_config.json"'
+   echo './gather_tool.sh --output-folder ~/projects/la/metrics_data/dev_docker/ \
+                          utility frequency-subset \
+                          --output-folder /opt/output \
+                          --run-name 2021Annual \
+                          --team-name TopTenPercent \
+                          --percent 10 \
+                          --team-config /opt/output/team-config.yaml'
    echo
    echo './gather_tool.sh --output-folder ~/projects/reports --repos-folder ~/projects/project_repos \
-                     utility frequency-subset --help'
+                          --tool-help utility'
    echo
    echo './gather_tool.sh --output-folder ~/projects/reports --repos-folder ~/projects/project_repos \
-                     gather --help'
-   echo
+                          --tool-help utility frequency-subset'
    echo
 }
 
@@ -182,6 +181,7 @@ if ${TOOL_HELP}; then
    docker run -it --rm \
       "${DOCKER_IMAGE}" \
       "${TOOL_NAME}" \
+      "$@" \
       --help
 
 else
