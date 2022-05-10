@@ -1,5 +1,6 @@
 
 - [Using the LeadingAgile Code Analysis Tools](#using-the-leadingagile-code-analysis-tools)
+  - [Versions of Tool Scripts](#versions-of-tool-scripts)
   - [Docker Images](#docker-images)
   - [Before Using](#before-using)
   - [Detailed Container Documentation](#detailed-container-documentation)
@@ -20,6 +21,16 @@ The Code Analysis tool gathers metrics data from a collection of git repositorie
 The Code Analysis tool creates a set of json data files for each repository for each time it is run. These data output files will be stored under a folder which you specific in the parameter set.
 
 Some of the other scripts are intended to show examples of extracting data from the json created by the Code Analysis too.
+
+## Versions of Tool Scripts
+
+The current versions of these scripts assume you are using `v0.2.1` of the Code Analysis docker images. There are some command line option, behavior, and output differences between the released versions for the docker images.
+
+If you need to work with the `v0.2.0` version of the docker images you can use the matching version of these scripts by checking out the tagged commit:
+
+```shell
+git switch 'use-image-0.2.0'
+```
 
 
 ## Docker Images
