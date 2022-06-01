@@ -67,8 +67,8 @@ az acr login --name leadingagilestudios
 2. Get the docker images
 
 ```shell
-docker pull leadingagilestudios.azurecr.io/analysis/gather:0.2.0
-docker pull leadingagilestudios.azurecr.io/analysis/gather-cli:0.2.0
+docker pull leadingagilestudios.azurecr.io/analysis/gather:0.2.1
+docker pull leadingagilestudios.azurecr.io/analysis/gather-cli:0.2.1
 ```
 
 ## Detailed Container Documentation
@@ -84,7 +84,7 @@ To explore possible uses of the Code Analysis Docker images beyond what is provi
 
 Run the `gather-cli` tool to collect metrics from a set of repositories
 
-Requires the `leadingagilestudios.azurecr.io/analysis/gather-cli:0.2.0` image.
+Requires the `leadingagilestudios.azurecr.io/analysis/gather-cli:0.2.1` image.
 
 ```
 gather_metrics.sh [options]
@@ -143,7 +143,7 @@ Before using:
          az login
          az acr login --name leadingagilestudios
    Get the docker image
-      docker pull leadingagilestudios.azurecr.io/analysis/gather-cli:0.2.0
+      docker pull leadingagilestudios.azurecr.io/analysis/gather-cli:0.2.1
 
 
 Example:
@@ -193,7 +193,7 @@ Before using:
          az login
          az acr login --name leadingagilestudios
    Get the docker image
-      docker pull leadingagilestudios.azurecr.io/analysis/gather:0.2.0
+      docker pull leadingagilestudios.azurecr.io/analysis/gather:0.2.1
 
 
 KEEP IN MIND (oddities of running in a docker image)

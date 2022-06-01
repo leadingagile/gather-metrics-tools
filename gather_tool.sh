@@ -42,7 +42,7 @@ usage()
    echo "         az login"
    echo "         az acr login --name leadingagilestudios"
    echo "   Get the docker image"
-   echo "      docker pull leadingagilestudios.azurecr.io/analysis/gather:0.2.0"
+   echo "      docker pull leadingagilestudios.azurecr.io/analysis/gather:0.2.1"
    echo
    echo
    echo "KEEP IN MIND (oddities of running in a docker image)"
