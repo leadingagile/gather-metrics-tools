@@ -60,7 +60,7 @@ usage()
    echo "         az login"
    echo "         az acr login --name leadingagilestudios"
    echo "   Get the docker image"
-   echo "      docker pull leadingagilestudios.azurecr.io/analysis/gather-cli:0.2.1"
+   echo "      docker pull leadingagilestudios.azurecr.io/analysis/gather-cli:0.3.0"
    echo
    echo
    echo "Example: "
@@ -70,13 +70,13 @@ usage()
 }
 
 DEBUG=false
-RUN_NAME="$(date -j +"%Y-%m-%d_%H-%M-%S%z")"
-START_DATE="$(date -j +"%Y-%m-%d")"
+RUN_NAME="$(date +"%Y-%m-%d_%H-%M-%S%z")"
+START_DATE="$(date +"%Y-%m-%d")"
 STEPS=52
 CONFIG_FILE=
 REPOS_FOLDER="$(pwd)"
 OUTPUT_FOLDER=
-DOCKER_IMAGE="leadingagilestudios.azurecr.io/analysis/gather-cli:0.2.1"
+DOCKER_IMAGE="leadingagilestudios.azurecr.io/analysis/gather-cli:0.3.0"
 TOOL_HELP=false
 
 while (( "$#" )); do
