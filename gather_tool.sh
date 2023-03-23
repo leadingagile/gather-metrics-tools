@@ -42,7 +42,7 @@ usage()
    echo "         az login"
    echo "         az acr login --name leadingagilestudios"
    echo "   Get the docker image"
-   echo "      docker pull leadingagilestudios.azurecr.io/analysis/gather:0.3.0"
+   echo "      docker pull leadingagilestudios.azurecr.io/analysis/gather:0.3.1"
    echo
    echo
    echo "KEEP IN MIND (oddities of running in a docker image)"
@@ -91,7 +91,7 @@ run_a_tool()
 
 DEBUG=false
 TOOL_NAMES=(gather statistics answers plotting utility)
-DOCKER_IMAGE="leadingagilestudios.azurecr.io/analysis/gather:0.3.0"
+DOCKER_IMAGE="leadingagilestudios.azurecr.io/analysis/gather:0.3.1"
 REPOS_FOLDER="$(pwd)"
 OUTPUT_FOLDER=
 TOOL_HELP=false
