@@ -24,7 +24,7 @@ Some of the other scripts are intended to show examples of extracting data from 
 
 ## Versions of Tool Scripts
 
-The current versions of these scripts assume you are using `v0.3.1` of the Code Analysis docker images. There are some command line option, behavior, and output differences between the released versions for the docker images.
+The current versions of these scripts assume you are using `v0.3.3` of the Code Analysis docker images. There are some command line option, behavior, and output differences between the released versions for the docker images.
 
 If you need to work with the `v0.2.0` version of the docker images you can use the matching version of these scripts by checking out the tagged commit:
 
@@ -67,8 +67,8 @@ az acr login --name leadingagilestudios
 2. Get the docker images
 
 ```shell
-docker pull leadingagilestudios.azurecr.io/analysis/gather:0.3.1
-docker pull leadingagilestudios.azurecr.io/analysis/gather-cli:0.3.1
+docker pull leadingagilestudios.azurecr.io/analysis/gather:0.3.3
+docker pull leadingagilestudios.azurecr.io/analysis/gather-cli:0.3.3
 ```
 
 ## Detailed Container Documentation
@@ -84,7 +84,7 @@ To explore possible uses of the Code Analysis Docker images beyond what is provi
 
 Run the `gather-cli` tool to collect metrics from a set of repositories
 
-Requires the `leadingagilestudios.azurecr.io/analysis/gather-cli:0.3.1` image.
+Requires the `leadingagilestudios.azurecr.io/analysis/gather-cli:0.3.3` image.
 
 ```
 gather_metrics.sh [options]
@@ -131,7 +131,7 @@ Options:
 
  -i, --image
       The docker image to use.
-      Defaults to 'leadingagilestudios.azurecr.io/analysis/gather-cli:0.3.1'
+      Defaults to 'leadingagilestudios.azurecr.io/analysis/gather-cli:0.3.3'
       The image MUST be a 'gather-cli' image.
 
 Be sure each repository is currently on the branch you are interested in evaluating
@@ -143,7 +143,7 @@ Before using:
          az login
          az acr login --name leadingagilestudios
    Get the docker image
-      docker pull leadingagilestudios.azurecr.io/analysis/gather-cli:0.3.1
+      docker pull leadingagilestudios.azurecr.io/analysis/gather-cli:0.3.3
 
 
 Example:
@@ -183,7 +183,7 @@ Options:
 
  -i, --image
       The docker image to use.
-      Defaults to 'leadingagilestudios.azurecr.io/analysis/gather:0.3.1'
+      Defaults to 'leadingagilestudios.azurecr.io/analysis/gather:0.3.3'
       The image MUST be the 'gather' image.
 
 Before using:
@@ -193,7 +193,7 @@ Before using:
          az login
          az acr login --name leadingagilestudios
    Get the docker image
-      docker pull leadingagilestudios.azurecr.io/analysis/gather:0.3.1
+      docker pull leadingagilestudios.azurecr.io/analysis/gather:0.3.3
 
 
 KEEP IN MIND (oddities of running in a docker image)

@@ -57,7 +57,7 @@ function usage
    Write-Output "         az login"
    Write-Output "         az acr login --name leadingagilestudios"
    Write-Output "   Get the docker image"
-   Write-Output "      docker pull leadingagilestudios.azurecr.io/analysis/gather-cli:0.3.1"
+   Write-Output "      docker pull leadingagilestudios.azurecr.io/analysis/gather-cli:0.3.3"
    Write-Output ""
    Write-Output ""
    Write-Output "Example: "
@@ -73,7 +73,7 @@ $STEPS=52
 $CONFIG_FILE=""
 $REPOS_FOLDER="$(Get-Location)"
 $OUTPUT_FOLDER=""
-$DOCKER_IMAGE="leadingagilestudios.azurecr.io/analysis/gather-cli:0.3.1"
+$DOCKER_IMAGE="leadingagilestudios.azurecr.io/analysis/gather-cli:0.3.3"
 $TOOL_HELP=$false
 
 for ($i = 0; $i -lt $args.count; $i++)
@@ -101,7 +101,7 @@ for ($i = 0; $i -lt $args.count; $i++)
    }
 }
 
-if ($DEBUG) 
+if ($DEBUG)
 {
    Write-Output ""
    Write-Output "DOCKER_IMAGE='${DOCKER_IMAGE}'"

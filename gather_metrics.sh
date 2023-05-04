@@ -60,7 +60,7 @@ usage()
    echo "         az login"
    echo "         az acr login --name leadingagilestudios"
    echo "   Get the docker image"
-   echo "      docker pull leadingagilestudios.azurecr.io/analysis/gather-cli:0.3.1"
+   echo "      docker pull leadingagilestudios.azurecr.io/analysis/gather-cli:0.3.3"
    echo
    echo
    echo "Example: "
@@ -76,7 +76,7 @@ STEPS=52
 CONFIG_FILE=
 REPOS_FOLDER="$(pwd)"
 OUTPUT_FOLDER=
-DOCKER_IMAGE="leadingagilestudios.azurecr.io/analysis/gather-cli:0.3.1"
+DOCKER_IMAGE="leadingagilestudios.azurecr.io/analysis/gather-cli:0.3.3"
 TOOL_HELP=false
 
 while (( "$#" )); do
